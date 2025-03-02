@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+export interface TokenService {
+  createToken(payload: string): string;
 
-@Injectable()
-export class TokenService {}
+  verifyToken(token: string): boolean;
+}
