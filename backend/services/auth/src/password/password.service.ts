@@ -1,4 +1,4 @@
-import { PasswordPayload } from './password-payload.interface';
+import { PasswordPayload } from './password-payload.dto';
 
 export interface PasswordService {
   hash(password: string): PasswordPayload;

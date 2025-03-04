@@ -6,8 +6,8 @@ import { TokenController } from './token.controller';
 @Module({
   imports: [
     JwtModule.register({
-      secret: 'secret_key',
-      signOptions: { expiresIn: '1h' },
+      secret: process.env.TOKEN_SECRET_KEY,
+      signOptions: { expiresIn: process.env.TOKEN_EXPIRES_IN },
     }),
   ],
   providers: [

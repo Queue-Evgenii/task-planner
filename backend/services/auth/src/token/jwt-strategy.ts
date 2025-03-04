@@ -7,7 +7,7 @@ export class JWTStrategy implements TokenService {
   constructor(private jwtService: JwtService) {}
 
   createToken(payload: string): string {
-    return this.jwtService.sign(payload);
+    return this.jwtService.sign({ id: payload });
   }
 
   verifyToken(token: string): boolean {

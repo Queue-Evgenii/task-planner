@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { randomBytes, pbkdf2Sync, timingSafeEqual } from 'crypto';
-import { PasswordPayload } from './password-payload.interface';
+import { PasswordPayload } from './password-payload.dto';
 import { PasswordService } from './password.service';
 
 @Injectable()
