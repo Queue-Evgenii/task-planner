@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
-import { User } from 'libs/db-lib/src/user.dto.entity';
+import { User } from '@app/db-lib/user.dto.entity';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 
@@ -13,7 +13,6 @@ export class UserController {
 
   @MessagePattern({ cmd: 'create_user' })
   create(user: User) {
-    console.log(123);
     return this.userService.create(user);
   }
 

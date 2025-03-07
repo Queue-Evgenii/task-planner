@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { PasswordService } from '../password/password.service';
-import { TokenService } from '../token/token.service';
-import { User } from 'libs/db-lib/src/user.dto.entity';
+import { PasswordService } from '@app/auth/password/password.service';
+import { TokenService } from '@app/auth/token/token.service';
+import { User } from '@app/db-lib/user.dto.entity';
 import { UserService } from './user.service';
 
 @Injectable()

@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from 'libs/db-lib/src/user.dto.entity';
-import { PasswordService } from '../password/password.service';
-import { TokenService } from '../token/token.service';
+import { User } from '@app/db-lib/user.dto.entity';
+import { PasswordService } from '@app/auth/password/password.service';
+import { TokenService } from '@app/auth/token/token.service';
 import { RpcException } from '@nestjs/microservices';
 
 @Injectable()

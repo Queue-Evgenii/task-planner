@@ -1,5 +1,7 @@
 import { HttpMessage } from './http-message.dto';
 
-export interface HttpResponse<T> extends HttpMessage {
-  data: T;
+export class HttpResponse<T> extends HttpMessage {
+  constructor(public data: T) {
+    super();
+  }
 }

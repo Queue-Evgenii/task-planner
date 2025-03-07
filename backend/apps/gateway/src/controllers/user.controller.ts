@@ -1,41 +1,41 @@
-import { Body, Controller, HttpException, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { catchError, map, Observable } from 'rxjs';
-import { LoginDto } from 'libs/dto-lib/src/user/login.dto';
-import { UserDto } from 'libs/dto-lib/src/user/user.dto';
-import { HttpMessage } from 'libs/http-lib/src/http-message.dto';
-import { HttpError } from 'libs/http-lib/src/http-error.dto';
+import { LoginDto } from '@app/dto-lib/user/login.dto';
+import { UserDto } from '@app/dto-lib/user/user.dto';
+import { HttpMessage } from '@app/http-lib/http-message.dto';
+import { HttpError } from '@app/http-lib/http-error.dto';
+import { HttpResponse } from '@app/http-lib/http-response.dto';
+import { HttpExceptionHandlerService } from '@app/http-lib/http-exception-handler.service';
 
 @Controller('api/user')
 export class UserController {
   constructor(
     @Inject('USER_MICROSERVICE') private readonly userClient: ClientProxy,
+    private readonly httpExceptionHandlerService: HttpExceptionHandlerService,
   ) {}
 
   @Post('create')
   create(@Body() user: UserDto): Observable<HttpMessage> {
     return this.userClient
-      .send<string, UserDto>({ cmd: 'create_user' }, user)
+      .send<unknown, UserDto>({ cmd: 'create_user' }, user)
       .pipe(
-        catchError((error: HttpError) => {
-          throw new HttpException(error.message, error.status);
-        }),
+        map((res) => new HttpResponse(res)),
+        catchError((error: HttpError) =>
+          this.httpExceptionHandlerService.handle(error),
+        ),
       );
   }
 
   @Post('login')
   login(@Body() loginData: LoginDto): Observable<HttpMessage> {
     return this.userClient
-      .send<string, LoginDto>({ cmd: 'login_user' }, loginData)
+      .send<unknown, LoginDto>({ cmd: 'login_user' }, loginData)
       .pipe(
-        map((res) => {
-          return {
-            data: res,
-          };
-        }),
-        catchError((error: HttpError) => {
-          throw new HttpException(error.message, error.status);
-        }),
+        map((res) => new HttpResponse(res)),
+        catchError((error: HttpError) =>
+          this.httpExceptionHandlerService.handle(error),
+        ),
       );
   }
 }

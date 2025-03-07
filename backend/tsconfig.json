@@ -18,6 +18,18 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@app/auth": [
+        "apps/auth/src"
+      ],
+      "@app/auth/*": [
+        "apps/auth/src/*"
+      ],
+      "@app/gateway": [
+        "apps/gateway/src"
+      ],
+      "@app/gateway/*": [
+        "apps/gateway/src/*"
+      ],
       "@app/db-lib": [
         "libs/db-lib/src"
       ],

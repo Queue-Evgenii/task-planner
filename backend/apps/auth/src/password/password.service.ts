@@ -1,4 +1,4 @@
-import { PasswordPayload } from 'libs/dto-lib/src/auth/password-payload.dto';
+import { PasswordPayload } from '@app/dto-lib/auth/password-payload.dto';
 
 export interface PasswordService {
   hash(password: string): PasswordPayload;
