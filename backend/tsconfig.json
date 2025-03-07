@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@app/db-lib": [
+        "libs/db-lib/src"
+      ],
+      "@app/db-lib/*": [
+        "libs/db-lib/src/*"
+      ],
+      "@app/dto-lib": [
+        "libs/dto-lib/src"
+      ],
+      "@app/dto-lib/*": [
+        "libs/dto-lib/src/*"
+      ],
+      "@app/http-lib": [
+        "libs/http-lib/src"
+      ],
+      "@app/http-lib/*": [
+        "libs/http-lib/src/*"
+      ]
+    }
+  }
+}
