@@ -1,8 +1,9 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PasswordService } from '@app/auth/password/password.service';
 import { TokenService } from '@app/auth/token/token.service';
 import { User } from '@app/db-lib/user.dto.entity';
 import { UserService } from './user.service';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,9 @@ export class AuthService {
         salt: remoteUser.salt,
       })
     ) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new RpcException(
+        new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED),
+      );
     }
 
     return this.tokenService.createToken(user.email);
