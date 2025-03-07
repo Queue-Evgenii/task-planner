@@ -1,4 +1,4 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* COLOR PALETTE */
 :root {
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -17,11 +17,16 @@
 
   --vt-c-text-light-1: var(--vt-c-indigo);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
+  --c-text-light-3: rgb(181, 22, 22);
   --vt-c-text-dark-1: var(--vt-c-white);
   --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --c-text-dark-3: rgb(150, 37, 37);
+
+  --c-button-dark-1: #2e27ad;
+  --c-button-light-1: #625cd3;
 }
 
-/* semantic color variables for this project */
+/* THEME LIGHT/DARK */
 :root {
   --color-background: var(--vt-c-white);
   --color-background-soft: var(--vt-c-white-soft);
@@ -32,6 +37,8 @@
 
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
+  --color-text-error: var(--c-text-light-3);
+  --color-button: var(--c-button-light-1);
 
   --section-gap: 160px;
 }
@@ -47,17 +54,15 @@
 
     --color-heading: var(--vt-c-text-dark-1);
     --color-text: var(--vt-c-text-dark-2);
+    --color-text-error: var(--c-text-dark-3);
+    --color-button: var(--c-button-dark-1);
   }
 }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+html {
+  font-size: 16px;
+  line-height: 1.25;
 }
-
 body {
   min-height: 100vh;
   color: var(--color-text);
@@ -65,21 +70,9 @@ body {
   transition:
     color 0.5s,
     background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
+  
+  font-family: Roboto, sans-serif;
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
