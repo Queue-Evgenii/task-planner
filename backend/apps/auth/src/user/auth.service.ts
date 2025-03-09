@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PasswordService } from '@app/auth/password/password.service';
 import { TokenService } from '@app/auth/token/token.service';
 import { User } from '@app/db-lib/user.dto.entity';

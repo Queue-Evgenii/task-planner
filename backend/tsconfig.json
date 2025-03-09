@@ -24,12 +24,6 @@
       "@app/auth/*": [
         "apps/auth/src/*"
       ],
-      "@app/gateway": [
-        "apps/gateway/src"
-      ],
-      "@app/gateway/*": [
-        "apps/gateway/src/*"
-      ],
       "@app/db-lib": [
         "libs/db-lib/src"
       ],
@@ -41,6 +35,12 @@
       ],
       "@app/dto-lib/*": [
         "libs/dto-lib/src/*"
+      ],
+      "@app/gateway": [
+        "apps/gateway/src"
+      ],
+      "@app/gateway/*": [
+        "apps/gateway/src/*"
       ],
       "@app/http-lib": [
         "libs/http-lib/src"

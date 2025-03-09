@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './user/user.module';
-import { TokenModule } from './token/token.module';
-import { PasswordModule } from './password/password.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TaskModule } from './task/task.module';
 
 @Module({
   imports: [
@@ -22,9 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         synchronize: true,
       }),
     }),
-    UserModule,
-    TokenModule,
-    PasswordModule,
+    TaskModule,
   ],
   controllers: [],
   providers: [],
