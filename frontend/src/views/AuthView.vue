@@ -1,56 +1,84 @@
 <script setup lang="ts">
 import { authorization, registration } from '@/api/auth';
 import ButtonComponent from '@/components/form/ButtonComponent.vue';
-import InputComponent from '@/components/form/InputComponent.vue';
-import { User } from '@/models/user';
-import { ref } from 'vue';
+import ValidationInputComponent from '@/components/form/ValidationInputComponent.vue';
+import type { UserDto } from '@/models/entities/UserDto';
+import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
+import { reactive, ref, toRaw } from 'vue';
 
 const hasAccount = ref(true);
-const email = ref("");
-const password = ref("");
-const name = ref("");
-const surname = ref("");
-const error = ref("");
+const data = reactive<UserDto>({
+  email: '',
+  password: '',
+  name: '',
+  surname: '',
+});
+const validator = new SimpleValidator();
 
-const authorizate = (user: User) => {
+const authorizate = (user: UserDto) => {
   authorization(user)
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
-}
-const registrate = (user: User) => {
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
+};
+const registrate = (user: UserDto) => {
   registration(user)
-    .then(data => console.log(data))
-    .catch(err => console.log(err));
-}
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err));
+};
 
 const handleClick = () => {
-  const user = new User(email.value, password.value, name.value, surname.value)
+  const user = toRaw(data);
+  console.log(user);
+  return
 
   if (hasAccount.value) {
     authorizate(user);
     return;
   }
   registrate(user);
-}
+};
 </script>
 
 <template>
   <form class="form">
-    <h1>{{ hasAccount ? "Sign In" : "Sign Up" }}</h1>
-    <InputComponent v-model="email" type="email" placeholder="Enter e-mail" />
-    <InputComponent v-model="password" type="password" placeholder="Enter password" />
-    <template v-if="!hasAccount">
-      <InputComponent v-model="name" type="name" placeholder="Enter first name" />
-      <InputComponent v-model="surname" type="surname" placeholder="Enter last name" />
-    </template>
+    <h1>{{ hasAccount ? 'Sign In' : 'Sign Up' }}</h1>
+    <div class="form__inputs">
+      <template v-if="!hasAccount">
+        <ValidationInputComponent
+          v-model="data.name"
+          :validator="validator"
+          :options="{ min: 3 }"
+          placeholder="Enter first name"
+        />
+        <ValidationInputComponent
+          v-model="data.surname"
+          :validator="validator"
+          :options="{ min: 3 }"
+          placeholder="Enter last name"
+        />
+      </template>
+      <ValidationInputComponent
+        v-model="data.email"
+        :validator="validator"
+        :options="{ required: true, email: true }"
+        type="email"
+        placeholder="Enter e-mail"
+      />
+      <ValidationInputComponent
+        v-model="data.password"
+        :validator="validator"
+        :options="{ min: 5 }"
+        type="password"
+        placeholder="Enter password"
+      />
+    </div>
     <div>
-      <ButtonComponent @click="handleClick">{{ hasAccount ? "Sign In" : "Sign Up" }}</ButtonComponent>
-      <p v-if="error.length > 0" class="error">
-        {{ error }}
-      </p>
+      <ButtonComponent @click="handleClick">{{
+        hasAccount ? 'Sign In' : 'Sign Up'
+      }}</ButtonComponent>
       <p class="another-link">
-        {{ hasAccount ? "No account?" : "Have account?" }}
-        <span @click="hasAccount = !hasAccount">{{ !hasAccount ? "Sign In" : "Sign Up" }}</span>
+        {{ hasAccount ? 'No account?' : 'Have account?' }}
+        <span @click="hasAccount = !hasAccount">{{ !hasAccount ? 'Sign In' : 'Sign Up' }}</span>
       </p>
     </div>
   </form>
@@ -59,11 +87,10 @@ const handleClick = () => {
 <style scoped>
 form {
   display: block;
-  row-gap: 12px;
   background-color: var(--color-background);
   padding: 1.25rem;
+  width: 100%;
   max-width: 400px;
-  min-width: 300px;
   border-radius: 0.5rem;
   box-shadow:
     0 10px 15px 8px var(--color-border),
@@ -75,11 +102,6 @@ h1 {
   font-weight: 600;
   text-align: center;
   color: var(--color-heading);
-}
-
-.error {
-  color: var(--color-text-error);
-  font-size: 0.875rem;
 }
 
 .another-link {
@@ -96,10 +118,17 @@ h1 {
 h1 {
   margin-bottom: 1.5rem;
 }
-input, button, .error {
-  margin-bottom: .75rem;
+.form__inputs {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+button,
+.error {
+  margin-bottom: 0.75rem;
 }
 button {
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 </style>

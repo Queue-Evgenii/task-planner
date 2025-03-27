@@ -6,8 +6,8 @@
 button {
   outline: none;
   border: 1px solid var(--color-border);
-  font-size: .875rem;
-  border-radius: .5rem;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   padding-left: 1.25rem;
