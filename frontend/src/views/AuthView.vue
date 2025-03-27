@@ -29,7 +29,7 @@ const registrate = (user: UserDto) => {
 const handleClick = () => {
   const user = toRaw(data);
   console.log(user);
-  return
+  return;
 
   if (hasAccount.value) {
     authorizate(user);

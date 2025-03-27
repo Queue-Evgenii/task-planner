@@ -1,5 +1,5 @@
-import type { Validator } from "./Validator";
-import type { ValidatorOptions } from "./ValidatorOptions";
+import type { Validator } from './Validator';
+import type { ValidatorOptions } from './ValidatorOptions';
 
 export class SimpleValidator implements Validator {
   validate(value: string, options: ValidatorOptions): string[] {

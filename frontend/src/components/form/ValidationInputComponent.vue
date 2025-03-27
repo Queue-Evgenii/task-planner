@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import InputComponent, { type InputProps } from './InputComponent.vue';
-import type { ValidatorOptions } from "@/models/utils/validator/ValidatorOptions"
+import type { ValidatorOptions } from '@/models/utils/validator/ValidatorOptions';
 import type { Validator } from '@/models/utils/validator/Validator';
 import { ref } from 'vue';
 
 interface ValidationInputProps extends InputProps {
-  validator: Validator,
-  options: ValidatorOptions,
+  validator: Validator;
+  options: ValidatorOptions;
 }
 
 const value = defineModel<string>({
@@ -17,8 +17,8 @@ const props = defineProps<ValidationInputProps>();
 const errors = ref<Array<string>>([]);
 
 const handleInput = (value: string) => {
-  errors.value = props.validator.validate(value, props.options)
-}
+  errors.value = props.validator.validate(value, props.options);
+};
 </script>
 
 <template>

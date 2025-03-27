@@ -1,6 +1,5 @@
 export interface ValidatorOptions
-  extends
-    ValidatorRequiredOption,
+  extends ValidatorRequiredOption,
     ValidatorEmailOption,
     ValidatorMinMaxOption,
     ValidatorRegexOption {}
