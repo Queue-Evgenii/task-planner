@@ -12,8 +12,6 @@
   &._f-dir-col {
     flex-direction: column;
   }
-}
-._flex {
   &._gap-x-8 {
     column-gap: 0.5rem;
   }
@@ -37,5 +35,8 @@
   }
   &._gap-y-32 {
     row-gap: 2rem;
+  }
+  & > ._flex-1-1-full {
+    flex: 1 1 100%;
   }
 }

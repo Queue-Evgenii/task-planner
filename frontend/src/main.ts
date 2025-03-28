@@ -1,3 +1,4 @@
+import "material-icons/iconfont/material-icons.css";
 import './assets/main.css';
 
 import { createApp } from 'vue';

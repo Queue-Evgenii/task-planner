@@ -1,6 +1,7 @@
 /* COLOR PALETTE */
 :root {
   --vt-c-white: #ffffff;
+  --vt-c-white-opacity: rgba(255, 255, 255, 0);
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
@@ -9,6 +10,7 @@
   --vt-c-black-mute: #282828;
 
   --vt-c-indigo: #2c3e50;
+  --vt-c-indigo-opacity: rgba(44, 62, 80, 0);
 
   --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
   --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
@@ -16,11 +18,13 @@
   --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
 
   --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --c-text-light-3: rgb(181, 22, 22);
+  --vt-c-text-light-1-o: var(--vt-c-indigo-opacity);
+  --vt-c-text-light-2: #3c3c3c;
+  --c-text-light-3: #b51616;
   --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-  --c-text-dark-3: rgb(150, 37, 37);
+  --vt-c-text-dark-1-o: var(--vt-c-white-opacity);
+  --vt-c-text-dark-2: #ebebeb;
+  --c-text-dark-3: #962525;
 
   --c-button-dark-1: #2e27ad;
   --c-button-light-1: #625cd3;
@@ -33,12 +37,15 @@
   --color-background-mute: var(--vt-c-white-mute);
 
   --color-border: var(--vt-c-divider-light-2);
+  --color-border-danger: var(--c-text-dark-3);
   --color-border-hover: var(--vt-c-divider-light-1);
 
   --color-heading: var(--vt-c-text-light-1);
+  --color-heading-opacity: var(--vt-c-text-light-1-o);
   --color-text: var(--vt-c-text-light-1);
   --color-text-error: var(--c-text-light-3);
   --color-button: var(--c-button-light-1);
+  --color-button-danger: var(--c-text-dark-3);
 
   --section-gap: 160px;
 }
@@ -50,11 +57,14 @@
     --color-background-mute: var(--vt-c-black-mute);
 
     --color-border: var(--vt-c-divider-dark-2);
+    --color-border-danger: var(--c-text-dark-3);
     --color-border-hover: var(--vt-c-divider-dark-1);
 
     --color-heading: var(--vt-c-text-dark-1);
+    --color-heading-opacity: var(--vt-c-text-dark-1-o);
     --color-text: var(--vt-c-text-dark-2);
     --color-text-error: var(--c-text-dark-3);
     --color-button: var(--c-button-dark-1);
+    --color-button-danger: var(--c-text-dark-3);
   }
 }
