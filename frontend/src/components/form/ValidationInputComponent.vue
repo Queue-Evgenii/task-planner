@@ -22,25 +22,15 @@ const handleInput = (value: string) => {
 </script>
 
 <template>
-  <div>
+  <div class="_flex _f-dir-col _gap-y-8">
     <InputComponent
       v-model="value"
       @update:model-value="handleInput"
       :type="type"
       :placeholder="placeholder"
     />
-    <ul v-if="errors.length > 0">
+    <ul v-if="errors.length > 0" class="_flex _f-dir-col _gap-y-8">
       <li v-for="(message, index) in errors" :key="index">{{ message }}</li>
     </ul>
   </div>
 </template>
-
-<style>
-ul {
-  margin-top: 0.5rem;
-}
-li {
-  color: var(--color-text-error);
-  font-size: 0.875rem;
-}
-</style>

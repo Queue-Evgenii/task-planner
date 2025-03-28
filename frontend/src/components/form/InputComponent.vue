@@ -1,5 +1,6 @@
 <script setup lang="ts">
 export interface InputProps {
+  name?: string;
   type?: string;
   placeholder?: string;
 }
@@ -14,20 +15,8 @@ const value = defineModel<string>({
 </script>
 
 <template>
-  <input v-model="value" :type="type" :placeholder="placeholder" />
+  <div class="_flex _f-dir-col _gap-y-12">
+    <label v-if="name !== undefined && name.length > 0">{{ name }}</label>
+    <input v-model="value" :type="type" :placeholder="placeholder" />
+  </div>
 </template>
-
-<style scoped>
-input {
-  outline: none;
-  border: 1px solid var(--color-border);
-  font-size: 0.875rem;
-  border-radius: 0.5rem;
-
-  background-color: var(--color-background-mute);
-  padding: 0.75rem;
-  width: 100%;
-  box-shadow: 0 1px 2px 0 rgba(var(--color-background-mute), 0.05);
-  color: var(--color-text);
-}
-</style>

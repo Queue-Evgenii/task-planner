@@ -58,22 +58,3 @@
     --color-button: var(--c-button-dark-1);
   }
 }
-
-html {
-  font-size: 16px;
-  line-height: 1.25;
-}
-body {
-  min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-
-  font-family: Roboto, sans-serif;
-
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}

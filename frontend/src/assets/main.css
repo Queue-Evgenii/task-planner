@@ -1,14 +1,43 @@
 @import './reset.css';
-@import './base.css';
+@import './vars.css';
+@import './layout.scss';
+@import './ui/button.css';
+@import './ui/input.css';
 
+html {
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 400;
+}
 body {
-  display: flex;
-  place-items: center;
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+
+  font-family: Roboto, sans-serif;
+
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#app {
+  height: 100%;
+  width: 100%;
 }
 
-#app {
+._container {
+  width: 100%;
   max-width: 1920px;
   margin: 0 auto;
-  padding: 2rem;
-  font-weight: 400;
+  padding: 0 2rem;
+}
+
+._title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-heading);
 }

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { authorization, registration } from '@/api/auth';
-import ButtonComponent from '@/components/form/ButtonComponent.vue';
 import ValidationInputComponent from '@/components/form/ValidationInputComponent.vue';
-import type { UserDto } from '@/models/entities/UserDto';
-import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
 import { reactive, ref, toRaw } from 'vue';
+import { authorization, registration } from '@/api/auth';
+import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
+import type { UserDto } from '@/models/entities/UserDto';
 
 const hasAccount = ref(true);
 const data = reactive<UserDto>({
@@ -40,21 +39,26 @@ const handleClick = () => {
 </script>
 
 <template>
-  <form class="form">
-    <h1>{{ hasAccount ? 'Sign In' : 'Sign Up' }}</h1>
-    <div class="form__inputs">
+  <div class="form _flex _ai-c _jc-c">
+    <form class="form__container _flex _f-dir-col _gap-y-16">
+    <h1 class="_title">
+      {{ hasAccount ? 'Sign In' : 'Sign Up' }}
+    </h1>
+    <div class="_flex _f-dir-col _gap-y-12">
       <template v-if="!hasAccount">
         <ValidationInputComponent
           v-model="data.name"
           :validator="validator"
           :options="{ min: 3 }"
           placeholder="Enter first name"
+          class="_input _input-errors"
         />
         <ValidationInputComponent
           v-model="data.surname"
           :validator="validator"
           :options="{ min: 3 }"
           placeholder="Enter last name"
+          class="_input _input-errors"
         />
       </template>
       <ValidationInputComponent
@@ -63,6 +67,7 @@ const handleClick = () => {
         :options="{ required: true, email: true }"
         type="email"
         placeholder="Enter e-mail"
+        class="_input _input-errors"
       />
       <ValidationInputComponent
         v-model="data.password"
@@ -70,65 +75,46 @@ const handleClick = () => {
         :options="{ min: 5 }"
         type="password"
         placeholder="Enter password"
+        class="_input _input-errors"
       />
     </div>
-    <div>
-      <ButtonComponent @click="handleClick">{{
+    <div class="_flex _f-dir-col _gap-y-8">
+      <button @click="handleClick" class="_button">{{
         hasAccount ? 'Sign In' : 'Sign Up'
-      }}</ButtonComponent>
-      <p class="another-link">
+      }}</button>
+      <p class="form__another-link">
         {{ hasAccount ? 'No account?' : 'Have account?' }}
         <span @click="hasAccount = !hasAccount">{{ !hasAccount ? 'Sign In' : 'Sign Up' }}</span>
       </p>
     </div>
   </form>
+  </div>
 </template>
 
-<style scoped>
-form {
-  display: block;
-  background-color: var(--color-background);
-  padding: 1.25rem;
+<style lang="scss">
+.form {
+  height: 100%;
   width: 100%;
-  max-width: 400px;
-  border-radius: 0.5rem;
-  box-shadow:
-    0 10px 15px 8px var(--color-border),
-    0 4px 6px -2px var(--color-border-hover);
-}
-
-h1 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-align: center;
-  color: var(--color-heading);
-}
-
-.another-link {
-  color: var(--color-text);
-  font-size: 0.875rem;
-  text-align: center;
-}
-
-.another-link span {
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-h1 {
-  margin-bottom: 1.5rem;
-}
-.form__inputs {
-  display: flex;
-  flex-direction: column;
-  row-gap: 0.75rem;
-  margin-bottom: 0.75rem;
-}
-button,
-.error {
-  margin-bottom: 0.75rem;
-}
-button {
-  margin-top: 0.5rem;
+  padding: 0 1.25rem;
+  &__container {
+    background-color: var(--color-background);
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 400px;
+    min-width: 300px;
+    border-radius: 0.5rem;
+    box-shadow:
+      0 10px 15px 8px var(--color-border),
+      0 4px 6px -2px var(--color-border-hover);
+  }
+  &__another-link {
+    color: var(--color-text);
+    font-size: 0.875rem;
+    text-align: center;
+    span {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
 }
 </style>
