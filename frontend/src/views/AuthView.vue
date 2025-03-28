@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ValidationInputComponent from '@/components/form/ValidationInputComponent.vue';
-import { reactive, ref, toRaw } from 'vue';
-import { authorization, registration } from '@/api/auth';
+import { inject, reactive, ref, toRaw } from 'vue';
+import { UserApi } from '@/api/modules/User';
 import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
 import type { UserDto } from '@/models/entities/UserDto';
 
@@ -13,14 +13,15 @@ const data = reactive<UserDto>({
   surname: '',
 });
 const validator = new SimpleValidator();
+const api = inject<UserApi>("UserApi")!;
 
 const authorizate = (user: UserDto) => {
-  authorization(user)
+  api.authorization(user)
     .then((data) => console.log(data))
     .catch((err) => console.log(err));
 };
 const registrate = (user: UserDto) => {
-  registration(user)
+  api.registration(user)
     .then((data) => console.log(data))
     .catch((err) => console.log(err));
 };
@@ -28,6 +29,7 @@ const registrate = (user: UserDto) => {
 const handleClick = () => {
   const user = toRaw(data);
   console.log(user);
+
   return;
 
   if (hasAccount.value) {
