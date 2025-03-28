@@ -4,6 +4,10 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/:pathMatch(.*)*',
+      redirect: '/home',
+    },
+    {
       path: '/',
       name: 'greeting',
       component: import('@/views/GreetingView.vue'),
@@ -14,9 +18,25 @@ const router = createRouter({
       component: import('@/views/AuthView.vue'),
     },
     {
-      path: '/home/dashboard',
-      name: 'home-dashboard',
-      component: import('@/views/DashboardView.vue'),
+      path: '/home',
+      name: 'home',
+      component: import('@/views/HomeView.vue'),
+      children: [
+        {
+          path: '',
+          redirect: '/home/tasks',
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          component: import('@/views/home/ProfileView.vue'),
+        },
+        {
+          path: 'tasks',
+          name: 'tasks',
+          component: import('@/views/home/TasksView.vue'),
+        },
+      ],
     },
   ],
 });
