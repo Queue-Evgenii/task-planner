@@ -1,9 +1,10 @@
-import { provide } from "vue";
+import { provide, type App } from "vue";
 import axios from "axios";
 import { UserApi } from "@/api/modules/User";
-import { Token } from "@/models/browser/Token";
+import { Token } from "@/models/utils/browser/Token";
+import { TaskApi } from "./modules/Task";
 
-export function useApiProvider() {
+export function useApiProvider(app: App) {
   const apiClient = axios.create({
     baseURL: "http://localhost:3000/api",
     timeout: 1000,
@@ -19,5 +20,6 @@ export function useApiProvider() {
     return config;
   });
 
-  provide("UserApi", new UserApi(apiClient));
+  app.provide("UserApi", new UserApi(apiClient));
+  app.provide("TaskApi", new TaskApi(apiClient));
 }
