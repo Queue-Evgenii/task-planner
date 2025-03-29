@@ -1,37 +1,25 @@
+import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import type { TaskDto } from '@/models/entities/TaskDto';
 import { TaskStatus } from '@/models/entities/enums/TaskStatus';
 
-export interface TaskStore {
-  taskList: Array<TaskDto>;
-}
-
-export const useTaskListStore = defineStore('taskList', {
-  state: () => ({
-    taskList: [] as Array<TaskDto>,
-  }) as TaskStore,
-  getters: {
-    taskList: (state) => {
-      return state.taskList;
-    },
-
-    completedTasks: (state: TaskStore): Array<TaskDto> => {
-      return state.taskList.filter((task) => task.completed === TaskStatus.COMPLETED);
-    },
-
-    activeTasks: (state: TaskStore): Array<TaskDto> => {
-      return state.taskList.filter((task) => task.completed === TaskStatus.ACTIVE);
-    },
-
-    overdueTasks: (state: TaskStore): Array<TaskDto> => {
-      return state.taskList.filter((task) => task.completed === TaskStatus.OVERDUED);
-    },
-  },
-  actions: {
-    setTasks: (state: TaskStore, taskList: Array<TaskDto>) => {
-      state.taskList = [...taskList];
-    }
+export const useTaskListStore = defineStore('tasks', () => {
+  const taskList = ref<Array<TaskDto>>([]);
+  const setTasks = (_taskList: Array<TaskDto>) => {
+    taskList.value = [..._taskList];
   }
+
+  const completedTasks = computed(() =>
+    taskList.value.filter((task) => task.status === TaskStatus.COMPLETED)
+  );
+
+  const activeTasks = computed(() =>
+    taskList.value.filter((task) => task.status === TaskStatus.ACTIVE)
+  );
+
+  const overduedTasks = computed(() =>
+    taskList.value.filter((task) => task.status === TaskStatus.OVERDUED)
+  );
+
+  return { taskList, completedTasks, activeTasks, overduedTasks, setTasks };
 });
-
-
