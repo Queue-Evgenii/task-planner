@@ -24,6 +24,7 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'home-root',
           redirect: '/home/tasks',
         },
         {
