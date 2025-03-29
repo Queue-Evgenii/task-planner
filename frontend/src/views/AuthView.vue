@@ -4,7 +4,12 @@ import { inject, reactive, ref, toRaw } from 'vue';
 import { UserApi } from '@/api/modules/User';
 import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
 import type { UserDto } from '@/models/entities/UserDto';
+import { Token } from '@/models/utils/browser/Token';
+import { useRouter } from 'vue-router';
+import type { HttpResponse } from '@/models/entities/HttpResponse';
 
+const router = useRouter();
+const api = inject<UserApi>("UserApi")!;
 const hasAccount = ref(true);
 const data = reactive<UserDto>({
   email: '',
@@ -13,24 +18,25 @@ const data = reactive<UserDto>({
   surname: '',
 });
 const validator = new SimpleValidator();
-const api = inject<UserApi>("UserApi")!;
+
+const handleResponse = (res: HttpResponse<string>) => {
+  Token.set(res.data);
+  router.push({ name: 'home-root' });
+}
 
 const authorizate = (user: UserDto) => {
   api.authorization(user)
-    .then((data) => console.log(data))
+    .then((res) => handleResponse(res))
     .catch((err) => console.log(err));
 };
 const registrate = (user: UserDto) => {
   api.registration(user)
-    .then((data) => console.log(data))
+    .then((res) => handleResponse(res))
     .catch((err) => console.log(err));
 };
 
 const handleClick = () => {
   const user = toRaw(data);
-  console.log(user);
-
-  return;
 
   if (hasAccount.value) {
     authorizate(user);
@@ -81,7 +87,7 @@ const handleClick = () => {
       />
     </div>
     <div class="_flex _f-dir-col _gap-y-8">
-      <button @click="handleClick" class="_button">{{
+      <button type="button" @click="handleClick" class="_button">{{
         hasAccount ? 'Sign In' : 'Sign Up'
       }}</button>
       <p class="form__another-link">
