@@ -1,6 +1,5 @@
 import { Api } from "@/api/Api";
 import type { UserDto } from "@/models/entities/UserDto";
-import type { TokenDto } from "@/models/entities/TokenDto";
 import type { AxiosInstance } from "axios";
 
 export class UserApi extends Api {
@@ -9,10 +8,10 @@ export class UserApi extends Api {
   }
 
   authorization = (payload: Partial<UserDto>) => {
-    return this.postRequest<TokenDto, Partial<UserDto>>("login", payload);
+    return this.postRequest<string, Partial<UserDto>>("login", payload);
   };
 
   registration = (payload: UserDto) => {
-    return this.postRequest<UserDto, UserDto>("create", payload);
+    return this.postRequest<string, UserDto>("create", payload);
   };
 }

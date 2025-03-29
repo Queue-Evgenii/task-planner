@@ -1,5 +1,5 @@
-import { Token } from "@/models/browser/Token";
-import axios, { type AxiosInstance } from "axios";
+import type { HttpResponse } from "@/models/entities/HttpResponse";
+import { type AxiosInstance } from "axios";
 
 export class Api {
   protected apiClient: AxiosInstance;
@@ -9,13 +9,23 @@ export class Api {
     this.endpoint = endpoint;
   }
 
-  protected getRequest = <T>(node: string): Promise<T> => {
+  protected getRequest = async <T>(node: string): Promise<HttpResponse<T>> => {
     return this.apiClient.get(this.endpoint + node).then((res) => res.data);
   };
 
-  protected postRequest = <T, S>(node: string, payload: S): Promise<T> => {
+  protected postRequest = async <T, S>(node: string, payload: S): Promise<HttpResponse<T>> => {
     return this.apiClient
       .post(this.endpoint + node, payload)
       .then((res) => res.data);
+  };
+
+  protected putRequest = async <T, S>(node: string, payload: S): Promise<HttpResponse<T>> => {
+    return this.apiClient
+      .put(this.endpoint + node, payload)
+      .then((res) => res.data);
+  };
+
+  protected deleteRequest = async <T>(node: string): Promise<HttpResponse<T>> => {
+    return this.apiClient.delete(this.endpoint + node).then((res) => res.data);
   };
 }
