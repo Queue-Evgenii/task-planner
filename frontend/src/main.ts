@@ -13,6 +13,6 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 
-useApiProvider();
+useApiProvider(app);
 
 app.mount('#app');
