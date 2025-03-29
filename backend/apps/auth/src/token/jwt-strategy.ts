@@ -13,8 +13,7 @@ export class JWTStrategy implements TokenService {
 
   verifyToken(token: string): boolean {
     try {
-      if (this.jwtService.verify(token)) return true;
-      return false;
+      return !!this.jwtService.verify(token);
     } catch {
       return false;
     }

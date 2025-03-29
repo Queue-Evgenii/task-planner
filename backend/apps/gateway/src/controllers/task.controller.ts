@@ -39,8 +39,9 @@ export class TaskController {
 
     const token = authHeader.replace('Bearer ', '').trim();
     return this.userClient
-      .send<string, string>({ cmd: 'decode_token' }, token)
+      .send<{ id: string }, string>({ cmd: 'decode_token' }, token)
       .pipe(
+        map<{ id: string }, string>((res) => res.id),
         catchError((error: HttpError) =>
           this.httpExceptionHandlerService.handle(error),
         ),
@@ -48,7 +49,7 @@ export class TaskController {
   }
 
   @Post()
-  create(
+  createTask(
     @Headers('Authorization') authHeader: string,
     @Body() task: Partial<Task>,
   ): Observable<HttpMessage> {
@@ -58,9 +59,30 @@ export class TaskController {
           .send<unknown, TaskPayload>({ cmd: 'create_task' }, { email, task })
           .pipe(
             map((res) => new HttpResponse(res)),
-            catchError((error: HttpError) =>
-              this.httpExceptionHandlerService.handle(error),
-            ),
+            catchError((error: HttpError) => {
+              console.log(error);
+              return this.httpExceptionHandlerService.handle(error);
+            }),
+          ),
+      ),
+    );
+  }
+
+  @Post('/steps')
+  createStep(
+    @Headers('Authorization') authHeader: string,
+    @Body() task: Partial<Task>,
+  ): Observable<HttpMessage> {
+    return this.decodeToken(authHeader).pipe(
+      switchMap((email: string) =>
+        this.taskClient
+          .send<unknown, TaskPayload>({ cmd: 'create_step' }, { email, task })
+          .pipe(
+            map((res) => new HttpResponse(res)),
+            catchError((error: HttpError) => {
+              console.log(error);
+              return this.httpExceptionHandlerService.handle(error);
+            }),
           ),
       ),
     );
@@ -85,7 +107,7 @@ export class TaskController {
     );
   }
 
-  @Delete(':id')
+  @Delete('/:id')
   delete(
     @Headers('Authorization') authHeader: string,
     @Param('id') id: number,
@@ -96,7 +118,7 @@ export class TaskController {
           .send<
             unknown,
             DeleteTaskPayload
-          >({ cmd: 'update_task' }, { email, id })
+          >({ cmd: 'delete_task' }, { email, id })
           .pipe(
             map((res) => new HttpResponse(res)),
             catchError((error: HttpError) =>

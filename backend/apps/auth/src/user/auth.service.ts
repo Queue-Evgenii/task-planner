@@ -16,19 +16,34 @@ export class AuthService {
   ) {}
 
   async login(user: User): Promise<string> {
-    const remoteUser = await this.userService.getUserByEmail(user.email);
+    const remoteUser = await this.getUserByEmailOrThrow(user.email);
+    this.throwIfPasswordInvalid(user.password, remoteUser);
+    return this.tokenService.createToken(user.email);
+  }
+
+  private async getUserByEmailOrThrow(email: string): Promise<User> {
+    const remoteUser = await this.userService.getUserByEmail(email);
+    if (!remoteUser) {
+      throw new RpcException(
+        new HttpException(
+          'User with provided email not exists',
+          HttpStatus.UNAUTHORIZED,
+        ),
+      );
+    }
+    return remoteUser;
+  }
+
+  private throwIfPasswordInvalid(password: string, remoteUser: User) {
     if (
-      !remoteUser ||
-      !this.passwordService.verify(user.password, {
+      !this.passwordService.verify(password, {
         password: remoteUser.password,
         salt: remoteUser.salt,
       })
     ) {
       throw new RpcException(
-        new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED),
+        new HttpException('Invalid password', HttpStatus.UNAUTHORIZED),
       );
     }
-
-    return this.tokenService.createToken(user.email);
   }
 }

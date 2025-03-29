@@ -22,18 +22,36 @@ export class UserService {
   }
 
   async create(user: User): Promise<string> {
-    const userExists = await this.getUserByEmail(user.email);
+    await this.throwIfUserExists(user.email);
+    this.hashPassword(user);
+
+    const createdUser = await this.createUserInDatabase(user);
+    return this.tokenService.createToken(createdUser.email);
+  }
+
+  private async throwIfUserExists(email: string): Promise<void> {
+    const userExists = await this.getUserByEmail(email);
     if (userExists) {
       throw new RpcException(
         new HttpException('User already exists', HttpStatus.BAD_REQUEST),
       );
     }
-    const passwordPayload = this.passwordService.hash(user.password);
-    user.password = passwordPayload.password;
-    user.salt = passwordPayload.salt;
+  }
 
-    user = this.userRepository.create(user);
-    user = await this.userRepository.save(user);
-    return this.tokenService.createToken(user.email);
+  private hashPassword(user: User): void {
+    const { password, salt } = this.passwordService.hash(user.password);
+    user.password = password;
+    user.salt = salt;
+  }
+
+  private createUserInDatabase(user: User): Promise<User> {
+    const createdUser = this.userRepository.create(user);
+    try {
+      return this.userRepository.save(createdUser);
+    } catch {
+      throw new RpcException(
+        new HttpException('Database error', HttpStatus.INTERNAL_SERVER_ERROR),
+      );
+    }
   }
 }

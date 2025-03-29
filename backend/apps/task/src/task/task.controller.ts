@@ -9,9 +9,16 @@ export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
   @MessagePattern({ cmd: 'create_task' })
-  create(@Payload() data: TaskPayload) {
+  createTask(@Payload() data: TaskPayload) {
+    console.log(data);
     const { email, task } = data;
-    return this.taskService.create(email, task);
+    return this.taskService.createTask(email, task);
+  }
+
+  @MessagePattern({ cmd: 'create_step' })
+  createStep(@Payload() data: TaskPayload) {
+    const { email, task } = data;
+    return this.taskService.createStep(email, task);
   }
 
   @MessagePattern({ cmd: 'update_task' })
@@ -22,6 +29,7 @@ export class TaskController {
 
   @MessagePattern({ cmd: 'delete_task' })
   delete(@Payload() data: DeleteTaskPayload) {
+    console.log(data);
     const { email, id } = data;
     return this.taskService.delete(email, id);
   }
