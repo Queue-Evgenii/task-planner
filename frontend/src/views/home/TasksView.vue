@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import DropdownTaskListComponent from '@/components/DropDownTaskListComponent.vue';
-import TaskItemComponent from '@/components/TaskItemComponent.vue';
+import TaskListComponent from '@/components/TaskListComponent.vue';
 import { TaskStatus } from '@/models/entities/enums/TaskStatus';
 import type { TaskDto } from '@/models/entities/TaskDto';
 import { computed } from 'vue';
@@ -61,10 +60,21 @@ const overdueTasks = computed(() =>
 
 <template>
   <div class="tasks">
-    <div class="tasks__container _container">
-      <DropdownTaskListComponent :visible="true" name="Active" :list="activeTasks" class="tasks__active" />
-      <DropdownTaskListComponent name="Completed" :list="completedTasks" class="tasks__completed" />
-      <DropdownTaskListComponent name="Overdued" :list="overdueTasks" class="tasks__overdued" />
+    <div class="tasks__container _container _flex _f-dir-col _gap-y-16">
+      <TaskListComponent :visible="true" name="Active" :list="activeTasks" class="tasks__section tasks__active" />
+      <span class="tasks__line"></span>
+      <TaskListComponent name="Completed" :list="completedTasks" class="tasks__section tasks__completed" />
+      <span class="tasks__line"></span>
+      <TaskListComponent name="Overdued" :list="overdueTasks" class="tasks__section tasks__overdued" />
     </div>
   </div>
 </template>
+
+<style>
+.tasks__line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-background-mute);
+}
+</style>

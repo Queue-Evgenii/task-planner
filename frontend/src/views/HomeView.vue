@@ -50,6 +50,7 @@ const activeTab = tabs.find(tab => tab.path === route.name);
 <style lang="scss">
 .home {
   &__title {
+  padding: 24px 0;
     font-size: 1.5rem;
   }
 }
