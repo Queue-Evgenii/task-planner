@@ -11,6 +11,29 @@
   font-size: 0.875rem;
   color: var(--color-text);
 }
+._input.input-with {
+  position: relative;
+}
+/* temporary (nothing more permanent than temporary) */
+._input.input-with input {
+  padding-right: 30%;
+}
+.input-with .input-with__button {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  z-index: 2;
+  padding: 0 1.25rem;
+
+  border-radius: 0.5rem;
+  outline: none;
+  
+  font-size: 1rem;
+  font-weight: 500;
+
+  background-color: var(--color-button);
+  color: var(--color-text);
+}
 ._input-errors li {
   color: var(--color-text-error);
   font-size: 0.875rem;
