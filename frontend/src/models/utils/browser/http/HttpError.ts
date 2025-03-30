@@ -1,4 +1,4 @@
 export interface HttpError {
-  code: number;
+  status: number;
   message: string;
 }

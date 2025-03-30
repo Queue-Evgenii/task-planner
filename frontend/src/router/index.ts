@@ -55,17 +55,16 @@ router.beforeEach(async (to, from, next) => {
   const taskListStore = useTaskListStore();
 
   if (!Token.exists()) {
-    if (to.name !== 'auth') {
-      return next({ name: 'auth' });
+    if (to.name === 'auth') {
+      return next();
     }
-    return next();
+    return next({ name: 'auth' });
   }
 
   if (Array.isArray(taskListStore.taskList) && taskListStore.taskList.length > 0) {
     return next();
   }
 
-  console.log(to.name)
   if (to.name === 'server-error') {
     return next();
   }
@@ -74,10 +73,12 @@ router.beforeEach(async (to, from, next) => {
     await taskListStore.fetchTasks();
   } catch (err: unknown) {
     const error = err as HttpError;
-    switch (error.code) {
+    console.log(error.status)
+    switch (error.status) {
       case 500:
         return next({ name: 'server-error' });
       case 401:
+        Token.remove();
         return next({ name: 'auth' });
       default:
         return next({ name: 'server-error' });
