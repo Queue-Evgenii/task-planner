@@ -35,14 +35,16 @@ export class TaskService {
     const taskExists = await this.getExistingTask(email, task);
 
     this.taskRepository.merge(taskExists, { ...task, steps: [] });
-    return await this.taskRepository.save(taskExists);
+    const updatedTask = await this.taskRepository.save(taskExists);
+
+    return await this.getRootTask(updatedTask);
   }
 
-  async delete(email: string, id: number): Promise<number> {
+  async delete(email: string, id: number): Promise<Task[]> {
     const taskExists = await this.getById(id);
-    this.throwIfWrongEmail(email, taskExists.userEmail);
+    this.throwIfWrongEmail(email, taskExists);
     await this.taskRepository.delete(id);
-    return id;
+    return await this.getAll(email);
   }
 
   async getAll(email: string): Promise<Task[]> {
@@ -55,7 +57,7 @@ export class TaskService {
   async getById(id: number): Promise<Task> {
     const taskExists = await this.taskRepository.findOne({
       where: { id },
-      relations: ['steps'],
+      relations: ['steps', 'parentTask'],
     });
     if (!taskExists) {
       throw new RpcException(
@@ -84,8 +86,16 @@ export class TaskService {
     }
   }
 
-  private throwIfWrongEmail(decodedEmail: string, realEmail: string) {
-    if (decodedEmail !== realEmail) {
+  private getOwnerEmail(task: Task): string {
+    if (!task.parentTask) {
+      return task.userEmail;
+    }
+    return this.getOwnerEmail(task.parentTask);
+  }
+
+  private throwIfWrongEmail(decodedEmail: string, task: Task) {
+    const ownerEmail = this.getOwnerEmail(task);
+    if (decodedEmail !== ownerEmail) {
       throw new RpcException(
         new HttpException(
           'Access denied! Not owner person!',
@@ -102,8 +112,20 @@ export class TaskService {
     this.throwIfTaskUndefined(task);
     this.throwIfTaskIdUndefined(task);
     const taskExists = await this.getById(task.id as number);
-    this.throwIfWrongEmail(email, taskExists.userEmail);
+    this.throwIfWrongEmail(email, taskExists);
 
     return taskExists;
+  }
+
+  private async getRootTask(task: Task): Promise<Task> {
+    let currentTask: Task | null = task;
+
+    while (currentTask.parentTask) {
+      currentTask = await this.getById(currentTask.parentTask.id);
+
+      if (!currentTask) break;
+    }
+
+    return currentTask;
   }
 }
