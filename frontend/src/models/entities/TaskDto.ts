@@ -9,4 +9,5 @@ export interface TaskDto {
   dueDate?: Date;
   updatedAt: Date;
   createdAt: Date;
+  parentTask: TaskDto;
 }

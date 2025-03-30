@@ -34,6 +34,20 @@ export const useTaskListStore = defineStore('taskList', {
     setTasks(taskList: Array<TaskDto>) {
       this._taskList = taskList;
     },
+    addTask(task: TaskDto) {
+      const index = this._taskList.findIndex(t => t.id === task.id);
+      if (index !== -1) {
+        this._taskList[index] = task;
+      } else {
+        this._taskList.push(task);
+      }
+    },
+    replaceTask(task: TaskDto) {
+      const index = this._taskList.findIndex(t => t.id === task.id);
+      if (index !== -1) {
+        this._taskList[index] = task;
+      }
+    },
     async fetchTasks() {
       const api = inject<TaskApi>("TaskApi")!;
       return new Promise<Array<TaskDto>>((resolve, reject) => {
@@ -43,7 +57,7 @@ export const useTaskListStore = defineStore('taskList', {
             resolve(this._taskList)
           })
           .catch((err: HttpError) => {
-            //console.log("fetchTaskList Error", err);
+            console.log("fetchTaskList Error", err);
             reject(err);
           })
       })

@@ -2,37 +2,99 @@
 import type { TaskApi } from '@/api/modules/Task';
 import InputWithButtonComponent from '@/components/form/InputWithButtonComponent.vue';
 import TaskListComponent from '@/components/TaskListComponent.vue';
+import { TaskStatus } from '@/models/entities/enums/TaskStatus';
+import type { TaskDto } from '@/models/entities/TaskDto';
+import type { HttpError } from '@/models/utils/browser/http/HttpError';
+import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
 import { useTaskListStore } from '@/stores/tasks';
+import type { _DeepPartial } from 'pinia';
 import { inject, ref } from 'vue';
 
 const taskListStore = useTaskListStore();
+const api = inject<TaskApi>("TaskApi")!;
+
 const newTask = ref("");
 const addNewTask = () => {
-  console.log(newTask.value)
+  api.createTask({ name: newTask.value })
+    .then((res: HttpResponse<TaskDto>) => {
+      taskListStore.addTask(res.data);
+    })
+    .catch((err: HttpError) => {
+      console.log("TasksView.vue addNewTask Err", err);
+    })
+    .finally(() => {
+      newTask.value = "";
+    })
 }
+
+const completeTask = (id: number) => {
+  api.updateTask({ id, status: TaskStatus.COMPLETED })
+    .then((res: HttpResponse<TaskDto>) => {
+      taskListStore.replaceTask(res.data);
+    })
+    .catch((err: HttpError) => {
+      console.log("TasksView.vue completeTask Err", err);
+    })
+};
+
+const addStep = (step: _DeepPartial<TaskDto>) => {
+  api.createStep(step)
+    .then((res: HttpResponse<TaskDto>) => {
+      taskListStore.addTask(res.data);
+    })
+    .catch((err: HttpError) => {
+      console.log("TasksView.vue addStep Err", err);
+    })
+};
+
+const deleteTask = (id: number) => {
+  api.deleteTask(id)
+    .then((res: HttpResponse<Array<TaskDto>>) => {
+      taskListStore.setTasks(res.data);
+    })
+    .catch((err: HttpError) => {
+      console.log("TasksView.vue deleteTask Err", err);
+    })
+};
 </script>
 
 <template>
   <div class="tasks">
     <div class="tasks__container _container _flex _f-dir-col _gap-y-16">
-      <TaskListComponent
-        :visible="true"
-        name="Active"
-        :list="taskListStore.activeTasks"
-        class="tasks__section tasks__active"
-      />
-      <span class="tasks__line"></span>
-      <TaskListComponent
-        name="Completed"
-        :list="taskListStore.completedTasks"
-        class="tasks__section tasks__completed"
-      />
-      <span class="tasks__line"></span>
-      <TaskListComponent
-        name="Overdued"
-        :list="taskListStore.overduedTasks"
-        class="tasks__section tasks__overdued"
-      />
+      <template v-if="taskListStore.activeTasks.length > 0">
+        <TaskListComponent
+          :visible="true"
+          name="Active"
+          :list="taskListStore.activeTasks"
+          @complete-task-hoisting="completeTask"
+          @add-task-hoisting="addStep"
+          @delete-task-hoisting="deleteTask"
+          class="tasks__section tasks__active"
+        />
+        <span class="tasks__line"></span>
+      </template>
+      <template v-if="taskListStore.completedTasks.length > 0">
+        <TaskListComponent
+          name="Completed"
+          :list="taskListStore.completedTasks"
+          @complete-task-hoisting="completeTask"
+          @add-task-hoisting="addStep"
+          @delete-task-hoisting="deleteTask"
+          class="tasks__section tasks__completed"
+        />
+        <span class="tasks__line"></span>
+      </template>
+      <template v-if="taskListStore.overduedTasks.length > 0">
+        <TaskListComponent
+          name="Overdued"
+          :list="taskListStore.overduedTasks"
+          @complete-task-hoisting="completeTask"
+          @add-task-hoisting="addStep"
+          @delete-task-hoisting="deleteTask"
+          class="tasks__section tasks__overdued"
+        />
+        <span class="tasks__line"></span>
+      </template>
     </div>
     <div class="tasks__input _container">
       <InputWithButtonComponent

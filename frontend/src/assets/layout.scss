@@ -12,6 +12,9 @@
   &._f-dir-col {
     flex-direction: column;
   }
+  &._gap-x-4 {
+    column-gap: 0.25rem;
+  }
   &._gap-x-8 {
     column-gap: 0.5rem;
   }

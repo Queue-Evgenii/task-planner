@@ -3,6 +3,13 @@ import type { TaskDto } from '@/models/entities/TaskDto';
 import TaskItemComponent from '@/components/TaskItemComponent.vue';
 import { ref } from 'vue';
 import CollapsibleListComponent from './CollapsibleListComponent.vue';
+import type { _DeepPartial } from 'pinia';
+
+const emits = defineEmits([
+  "completeTaskHoisting",
+  "deleteTaskHoisting",
+  "addTaskHoisting"
+]);
 
 const props = defineProps({
   visible: {
@@ -19,6 +26,12 @@ const props = defineProps({
   }
 })
 const isVisible = ref(props.visible);
+
+const delegateCompleteTaskHoisting = (id: number) => emits("completeTaskHoisting", id);
+
+const delegateAddTaskHoisting = (step: _DeepPartial<TaskDto>) => emits("addTaskHoisting", step);
+
+const delegateDeleteTask = (id: number) => emits("deleteTaskHoisting", id);
 </script>
 
 <template>
@@ -36,7 +49,12 @@ const isVisible = ref(props.visible);
     <CollapsibleListComponent v-if="list.length > 0" :is-visible="isVisible">
       <ul :class="['drop-down__list', isVisible ? '_visible' : '']">
         <li v-for="(task, index) in list" :key="index" class="drop-down__item">
-          <TaskItemComponent :task="task" />
+          <TaskItemComponent
+            :task="task"
+            @complete-task-hoisting="delegateCompleteTaskHoisting"
+            @add-task-hoisting="delegateAddTaskHoisting"
+            @delete-task-hoisting="delegateDeleteTask"
+          />
         </li>
       </ul>
     </CollapsibleListComponent>
