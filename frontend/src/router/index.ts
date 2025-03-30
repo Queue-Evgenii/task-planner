@@ -52,39 +52,9 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const taskListStore = useTaskListStore();
-
-  if (!Token.exists()) {
-    if (to.name === 'auth') {
-      return next();
-    }
-    return next({ name: 'auth' });
-  }
-
-  if (Array.isArray(taskListStore.taskList) && taskListStore.taskList.length > 0) {
-    return next();
-  }
-
-  if (to.name === 'server-error') {
-    return next();
-  }
-
-  try {
-    await taskListStore.fetchTasks();
-  } catch (err: unknown) {
-    const error = err as HttpError;
-    console.log(error.status)
-    switch (error.status) {
-      case 500:
-        return next({ name: 'server-error' });
-      case 401:
-        Token.remove();
-        return next({ name: 'auth' });
-      default:
-        return next({ name: 'server-error' });
-    }
-  }
-  next({ name: 'home-root' })
+  if (to.name === 'greeting') return next();
+  if (from.name === undefined) return next({ name: 'greeting' });
+  next();
 });
 
 export default router;

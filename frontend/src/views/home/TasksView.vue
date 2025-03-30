@@ -8,19 +8,22 @@ import type { HttpError } from '@/models/utils/browser/http/HttpError';
 import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
 import { useTaskListStore } from '@/stores/tasks';
 import type { _DeepPartial } from 'pinia';
-import { inject, ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
 
 const taskListStore = useTaskListStore();
 const api = inject<TaskApi>("TaskApi")!;
 
 const newTask = ref("");
+
+const handleAddTaskResponse = (res: HttpResponse<TaskDto>) => {
+  taskListStore.addTask(res.data);
+}
+
 const addNewTask = () => {
   api.createTask({ name: newTask.value })
-    .then((res: HttpResponse<TaskDto>) => {
-      taskListStore.addTask(res.data);
-    })
+    .then(handleAddTaskResponse)
     .catch((err: HttpError) => {
-      console.log("TasksView.vue addNewTask Err", err);
+      console.log("TasksView.vue addNewTask Error", err);
     })
     .finally(() => {
       newTask.value = "";
@@ -33,17 +36,7 @@ const completeTask = (id: number) => {
       taskListStore.replaceTask(res.data);
     })
     .catch((err: HttpError) => {
-      console.log("TasksView.vue completeTask Err", err);
-    })
-};
-
-const addStep = (step: _DeepPartial<TaskDto>) => {
-  api.createStep(step)
-    .then((res: HttpResponse<TaskDto>) => {
-      taskListStore.addTask(res.data);
-    })
-    .catch((err: HttpError) => {
-      console.log("TasksView.vue addStep Err", err);
+      console.log("TasksView.vue completeTask Error", err);
     })
 };
 
@@ -53,7 +46,15 @@ const deleteTask = (id: number) => {
       taskListStore.setTasks(res.data);
     })
     .catch((err: HttpError) => {
-      console.log("TasksView.vue deleteTask Err", err);
+      console.log("TasksView.vue deleteTask Error", err);
+    })
+};
+
+const addStep = (step: _DeepPartial<TaskDto>) => {
+  api.createStep(step)
+    .then(handleAddTaskResponse)
+    .catch((err: HttpError) => {
+      console.log("TasksView.vue addStep Error", err);
     })
 };
 </script>
