@@ -1,3 +1,7 @@
+import type { HttpError } from '@/models/utils/browser/http/HttpError';
+import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
+import { Token } from '@/models/utils/browser/Token';
+import { useTaskListStore } from '@/stores/tasks';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -39,7 +43,47 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/server-error',
+      name: 'server-error',
+      component: import('@/views/ServerErrorView.vue'),
+    },
   ],
+});
+
+router.beforeEach(async (to, from, next) => {
+  const taskListStore = useTaskListStore();
+
+  if (!Token.exists()) {
+    if (to.name !== 'auth') {
+      return next({ name: 'auth' });
+    }
+    return next();
+  }
+
+  if (Array.isArray(taskListStore.taskList) && taskListStore.taskList.length > 0) {
+    return next();
+  }
+
+  console.log(to.name)
+  if (to.name === 'server-error') {
+    return next();
+  }
+
+  try {
+    await taskListStore.fetchTasks();
+  } catch (err: unknown) {
+    const error = err as HttpError;
+    switch (error.code) {
+      case 500:
+        return next({ name: 'server-error' });
+      case 401:
+        return next({ name: 'auth' });
+      default:
+        return next({ name: 'server-error' });
+    }
+  }
+  next({ name: 'home-root' })
 });
 
 export default router;

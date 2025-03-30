@@ -1,4 +1,4 @@
-import type { HttpResponse } from "@/models/entities/HttpResponse";
+import type { HttpResponse } from "@/models/utils/browser/http/HttpResponse";
 import { type AxiosInstance } from "axios";
 
 export class Api {

@@ -6,7 +6,7 @@ import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
 import type { UserDto } from '@/models/entities/UserDto';
 import { Token } from '@/models/utils/browser/Token';
 import { useRouter } from 'vue-router';
-import type { HttpResponse } from '@/models/entities/HttpResponse';
+import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
 
 const router = useRouter();
 const api = inject<UserApi>("UserApi")!;

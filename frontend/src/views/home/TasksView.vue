@@ -5,17 +5,6 @@ import { useTaskListStore } from '@/stores/tasks';
 import { inject } from 'vue';
 
 const taskListStore = useTaskListStore();
-const api = inject<TaskApi>("TaskApi")!;
-
-if (!taskListStore.taskList) {
-  api.getAllTasks()
-    .then(res => {
-      taskListStore.setTasks(res.data);
-    })
-    .catch(err => {
-      console.log("TasksView.vue getAllTasks Err", err);
-    })
-}
 
 </script>
 
