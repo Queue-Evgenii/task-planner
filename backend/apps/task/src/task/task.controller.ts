@@ -10,7 +10,6 @@ export class TaskController {
 
   @MessagePattern({ cmd: 'create_task' })
   createTask(@Payload() data: TaskPayload) {
-    console.log(data);
     const { email, task } = data;
     return this.taskService.createTask(email, task);
   }
@@ -29,7 +28,6 @@ export class TaskController {
 
   @MessagePattern({ cmd: 'delete_task' })
   delete(@Payload() data: DeleteTaskPayload) {
-    console.log(data);
     const { email, id } = data;
     return this.taskService.delete(email, id);
   }
