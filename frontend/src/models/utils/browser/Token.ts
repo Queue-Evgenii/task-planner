@@ -1,8 +1,8 @@
 export class Token {
-  private static readonly TOKEN_KEY = "planner_access_token";
+  private static readonly TOKEN_KEY = 'planner_access_token';
 
   static get = (): string => {
-    return localStorage.getItem(this.TOKEN_KEY) || "";
+    return localStorage.getItem(this.TOKEN_KEY) || '';
   };
 
   static set = (token: string): void => {

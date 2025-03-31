@@ -18,6 +18,7 @@ export class TaskService {
     return this.taskRepository.save(task);
   }
 
+  // TODO: must return root parent
   async createStep(email: string, task: Partial<Task>): Promise<Task> {
     const taskExists = await this.getExistingTask(email, task);
 

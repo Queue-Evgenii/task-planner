@@ -1,6 +1,6 @@
-import type { UserDto } from "@/models/entities/UserDto";
-import type { AxiosInstance } from "axios";
-import { AbstractUserApi } from "./AbstractUser";
+import type { UserDto } from '@/models/entities/UserDto';
+import type { AxiosInstance } from 'axios';
+import { AbstractUserApi } from './AbstractUser';
 
 export class UserApi extends AbstractUserApi {
   constructor(apiClient: AxiosInstance) {
@@ -8,6 +8,6 @@ export class UserApi extends AbstractUserApi {
   }
 
   getUser = () => {
-    return this.getRequest<UserDto>("me/");
+    return this.getRequest<UserDto>('me/');
   };
 }

@@ -12,52 +12,52 @@ import type { _DeepPartial } from 'pinia';
 import { inject, onMounted, ref } from 'vue';
 
 const taskListStore = useTaskListStore();
-const taskApi = inject<TaskApi>("TaskApi")!;
+const taskApi = inject<TaskApi>('TaskApi')!;
 
-const newTask = ref("");
+const newTask = ref('');
 
 const handleTaskResponse = (res: HttpResponse<TaskDto>) => {
   taskListStore.addTask(res.data);
-}
+};
 const handleTaskListResponse = (res: HttpResponse<Array<TaskDto>>) => {
   taskListStore.setTasks(res.data);
-}
+};
 
 const fetchTasks = () => {
   if (taskListStore.taskList.length > 0) return;
   withErrorHandling(taskApi.getAllTasks())
     .then(handleTaskListResponse)
-    .catch((err: HttpError) => console.log("TasksView.vue fetchTasks Error", err))
-}
+    .catch((err: HttpError) => console.log('TasksView.vue fetchTasks Error', err));
+};
 
 const addNewTask = () => {
   withErrorHandling(taskApi.createTask({ name: newTask.value }))
     .then(handleTaskResponse)
-    .catch((err: HttpError) => console.log("TasksView.vue addNewTask Error", err))
-    .finally(() => newTask.value = "")
-}
+    .catch((err: HttpError) => console.log('TasksView.vue addNewTask Error', err))
+    .finally(() => (newTask.value = ''));
+};
 
 const completeTask = (id: number) => {
   withErrorHandling(taskApi.updateTask({ id, status: TaskStatus.COMPLETED }))
     .then((res: HttpResponse<TaskDto>) => taskListStore.replaceTask(res.data))
-    .catch((err: HttpError) => console.log("TasksView.vue completeTask Error", err))
+    .catch((err: HttpError) => console.log('TasksView.vue completeTask Error', err));
 };
 
 const deleteTask = (id: number) => {
   withErrorHandling(taskApi.deleteTask(id))
     .then(handleTaskListResponse)
-    .catch((err: HttpError) => console.log("TasksView.vue deleteTask Error", err))
+    .catch((err: HttpError) => console.log('TasksView.vue deleteTask Error', err));
 };
 
 const addStep = (step: _DeepPartial<TaskDto>) => {
   withErrorHandling(taskApi.createStep(step))
     .then(handleTaskResponse)
-    .catch((err: HttpError) => console.log("TasksView.vue addStep Error", err))
+    .catch((err: HttpError) => console.log('TasksView.vue addStep Error', err));
 };
 
 onMounted(() => {
   fetchTasks();
-})
+});
 </script>
 
 <template>

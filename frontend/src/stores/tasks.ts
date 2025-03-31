@@ -32,7 +32,7 @@ export const useTaskListStore = defineStore('taskList', {
       this._taskList = taskList;
     },
     addTask(task: TaskDto) {
-      const index = this._taskList.findIndex(t => t.id === task.id);
+      const index = this._taskList.findIndex((t) => t.id === task.id);
       if (index !== -1) {
         this._taskList[index] = task;
       } else {
@@ -40,13 +40,13 @@ export const useTaskListStore = defineStore('taskList', {
       }
     },
     replaceTask(task: TaskDto) {
-      const index = this._taskList.findIndex(t => t.id === task.id);
+      const index = this._taskList.findIndex((t) => t.id === task.id);
       if (index !== -1) {
         this._taskList[index] = task;
       }
     },
     clearState(): void {
       this._taskList = [];
-    }
-  }
+    },
+  },
 });

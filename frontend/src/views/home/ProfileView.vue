@@ -21,8 +21,8 @@ const fetchUser = () => {
     .then((res: HttpResponse<UserDto>) => {
       userStore.setUser(res.data);
     })
-    .catch((err: HttpError) => console.log("ProfileView.vue fetchUser Error", err))
-}
+    .catch((err: HttpError) => console.log('ProfileView.vue fetchUser Error', err));
+};
 const logout = () => {
   Token.remove();
   userStore.clearState();
@@ -32,14 +32,16 @@ const logout = () => {
 
 onMounted(() => {
   fetchUser();
-})
+});
 </script>
 
 <template>
   <div v-if="userStore.user" class="profile">
     <div class="profile__container _container _flex _f-dir-col _gap-y-12">
       <h2 class="profile__title">Hello, {{ userStore.fullname }} &#128075;</h2>
-      <h3 class="profile__email">Verified with <span>{{ userStore.user.email }}</span></h3>
+      <h3 class="profile__email">
+        Verified with <span>{{ userStore.user.email }}</span>
+      </h3>
       <button @click="logout" class="profile__button _button-danger">Log Out</button>
     </div>
   </div>

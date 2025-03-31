@@ -5,11 +5,7 @@ import { ref } from 'vue';
 import CollapsibleListComponent from './CollapsibleListComponent.vue';
 import type { _DeepPartial } from 'pinia';
 
-const emits = defineEmits([
-  "completeTaskHoisting",
-  "deleteTaskHoisting",
-  "addTaskHoisting"
-]);
+const emits = defineEmits(['completeTaskHoisting', 'deleteTaskHoisting', 'addTaskHoisting']);
 
 const props = defineProps({
   visible: {
@@ -23,25 +19,22 @@ const props = defineProps({
   list: {
     type: Array<TaskDto>,
     required: true,
-  }
-})
+  },
+});
 const isVisible = ref(props.visible);
 
-const delegateCompleteTaskHoisting = (id: number) => emits("completeTaskHoisting", id);
+const delegateCompleteTaskHoisting = (id: number) => emits('completeTaskHoisting', id);
 
-const delegateAddTaskHoisting = (step: _DeepPartial<TaskDto>) => emits("addTaskHoisting", step);
+const delegateAddTaskHoisting = (step: _DeepPartial<TaskDto>) => emits('addTaskHoisting', step);
 
-const delegateDeleteTask = (id: number) => emits("deleteTaskHoisting", id);
+const delegateDeleteTask = (id: number) => emits('deleteTaskHoisting', id);
 </script>
 
 <template>
   <div class="drop-down">
     <button
       @click="isVisible = !isVisible"
-      :class="[
-        'drop-down__button _flex _ai-c _gap-x-8',
-        isVisible ? '_active' : ''
-      ]"
+      :class="['drop-down__button _flex _ai-c _gap-x-8', isVisible ? '_active' : '']"
     >
       <span>{{ name }}</span>
       <i class="material-icons">chevron_right</i>

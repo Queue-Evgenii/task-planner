@@ -12,13 +12,12 @@ const toNextRoute = () => {
   setTimeout(() => {
     router.push({ name: Token.exists() ? 'home-root' : 'auth' });
     clearTimeout(timeout.value);
-  }, 1000)
-}
+  }, 1000);
+};
 
 onMounted(() => {
-  toNextRoute()
+  toNextRoute();
 });
-
 </script>
 
 <template>

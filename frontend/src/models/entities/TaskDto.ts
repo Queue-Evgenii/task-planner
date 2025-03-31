@@ -1,4 +1,4 @@
-import type { TaskStatus } from "./enums/TaskStatus";
+import type { TaskStatus } from './enums/TaskStatus';
 
 export interface TaskDto {
   id: number;

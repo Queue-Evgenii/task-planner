@@ -10,7 +10,7 @@ import type { AuthApi } from '@/api/modules/user/Auth';
 import { withErrorHandling } from '@/api/ApiErrorHandler';
 
 const router = useRouter();
-const authApi = inject<AuthApi>("AuthApi")!;
+const authApi = inject<AuthApi>('AuthApi')!;
 const hasAccount = ref(true);
 const data = reactive<UserDto>({
   email: '',
@@ -23,7 +23,7 @@ const validator = new SimpleValidator();
 const handleResponse = (res: HttpResponse<string>) => {
   Token.set(res.data);
   router.push({ name: 'home-root' });
-}
+};
 
 const authorizate = (user: UserDto) => {
   withErrorHandling(authApi.authorization(user))
@@ -50,53 +50,53 @@ const handleClick = () => {
 <template>
   <div class="form _flex _ai-c _jc-c">
     <form class="form__container _flex _f-dir-col _gap-y-16">
-    <h1 class="_title">
-      {{ hasAccount ? 'Sign In' : 'Sign Up' }}
-    </h1>
-    <div class="_flex _f-dir-col _gap-y-12">
-      <template v-if="!hasAccount">
+      <h1 class="_title">
+        {{ hasAccount ? 'Sign In' : 'Sign Up' }}
+      </h1>
+      <div class="_flex _f-dir-col _gap-y-12">
+        <template v-if="!hasAccount">
+          <ValidationInputComponent
+            v-model="data.name"
+            :validator="validator"
+            :options="{ min: 3 }"
+            placeholder="Enter first name"
+            class="_input _input-errors"
+          />
+          <ValidationInputComponent
+            v-model="data.surname"
+            :validator="validator"
+            :options="{ min: 3 }"
+            placeholder="Enter last name"
+            class="_input _input-errors"
+          />
+        </template>
         <ValidationInputComponent
-          v-model="data.name"
+          v-model="data.email"
           :validator="validator"
-          :options="{ min: 3 }"
-          placeholder="Enter first name"
+          :options="{ required: true, email: true }"
+          type="email"
+          placeholder="Enter e-mail"
           class="_input _input-errors"
         />
         <ValidationInputComponent
-          v-model="data.surname"
+          v-model="data.password"
           :validator="validator"
-          :options="{ min: 3 }"
-          placeholder="Enter last name"
+          :options="{ min: 5 }"
+          type="password"
+          placeholder="Enter password"
           class="_input _input-errors"
         />
-      </template>
-      <ValidationInputComponent
-        v-model="data.email"
-        :validator="validator"
-        :options="{ required: true, email: true }"
-        type="email"
-        placeholder="Enter e-mail"
-        class="_input _input-errors"
-      />
-      <ValidationInputComponent
-        v-model="data.password"
-        :validator="validator"
-        :options="{ min: 5 }"
-        type="password"
-        placeholder="Enter password"
-        class="_input _input-errors"
-      />
-    </div>
-    <div class="_flex _f-dir-col _gap-y-8">
-      <button type="button" @click="handleClick" class="_button">{{
-        hasAccount ? 'Sign In' : 'Sign Up'
-      }}</button>
-      <p class="form__another-link">
-        {{ hasAccount ? 'No account?' : 'Have account?' }}
-        <span @click="hasAccount = !hasAccount">{{ !hasAccount ? 'Sign In' : 'Sign Up' }}</span>
-      </p>
-    </div>
-  </form>
+      </div>
+      <div class="_flex _f-dir-col _gap-y-8">
+        <button type="button" @click="handleClick" class="_button">
+          {{ hasAccount ? 'Sign In' : 'Sign Up' }}
+        </button>
+        <p class="form__another-link">
+          {{ hasAccount ? 'No account?' : 'Have account?' }}
+          <span @click="hasAccount = !hasAccount">{{ !hasAccount ? 'Sign In' : 'Sign Up' }}</span>
+        </p>
+      </div>
+    </form>
   </div>
 </template>
 
