@@ -1,10 +1,10 @@
-import { Api } from "@/api/Api";
 import type { UserDto } from "@/models/entities/UserDto";
 import type { AxiosInstance } from "axios";
+import { AbstractUserApi } from "./AbstractUser";
 
-export class UserApi extends Api {
+export class AuthApi extends AbstractUserApi {
   constructor(apiClient: AxiosInstance) {
-    super(apiClient, "user/");
+    super(apiClient);
   }
 
   authorization = (payload: Partial<UserDto>) => {

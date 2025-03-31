@@ -1,8 +1,9 @@
 import { provide, type App } from "vue";
 import axios from "axios";
-import { UserApi } from "@/api/modules/User";
 import { Token } from "@/models/utils/browser/Token";
 import { TaskApi } from "./modules/Task";
+import { AuthApi } from "./modules/user/Auth";
+import { UserApi } from "./modules/user/User";
 
 export function useApiProvider(app: App) {
   const apiClient = axios.create({
@@ -21,5 +22,6 @@ export function useApiProvider(app: App) {
   });
 
   app.provide("UserApi", new UserApi(apiClient));
+  app.provide("AuthApi", new AuthApi(apiClient));
   app.provide("TaskApi", new TaskApi(apiClient));
 }

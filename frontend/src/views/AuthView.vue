@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import ValidationInputComponent from '@/components/form/ValidationInputComponent.vue';
 import { inject, reactive, ref, toRaw } from 'vue';
-import { UserApi } from '@/api/modules/User';
 import { SimpleValidator } from '@/models/utils/validator/SimpleValidator';
 import type { UserDto } from '@/models/entities/UserDto';
 import { Token } from '@/models/utils/browser/Token';
 import { useRouter } from 'vue-router';
 import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
+import type { AuthApi } from '@/api/modules/user/Auth';
+import { withErrorHandling } from '@/api/ApiErrorHandler';
 
 const router = useRouter();
-const api = inject<UserApi>("UserApi")!;
+const authApi = inject<AuthApi>("AuthApi")!;
 const hasAccount = ref(true);
 const data = reactive<UserDto>({
   email: '',
@@ -25,14 +26,14 @@ const handleResponse = (res: HttpResponse<string>) => {
 }
 
 const authorizate = (user: UserDto) => {
-  api.authorization(user)
-    .then((res) => handleResponse(res))
-    .catch((err) => console.log(err));
+  withErrorHandling(authApi.authorization(user))
+    .then(handleResponse)
+    .catch((err) => console.log('AuthView.vue authorizate Error', err));
 };
 const registrate = (user: UserDto) => {
-  api.registration(user)
-    .then((res) => handleResponse(res))
-    .catch((err) => console.log(err));
+  withErrorHandling(authApi.registration(user))
+    .then(handleResponse)
+    .catch((err) => console.log('AuthView.vue registrate Error', err));
 };
 
 const handleClick = () => {
