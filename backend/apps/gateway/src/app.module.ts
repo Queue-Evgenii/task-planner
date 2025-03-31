@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { AuthController } from './controllers/auth.controller';
 import { UserController } from './controllers/user.controller';
 import { TaskController } from './controllers/task.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { HttpLibModule } from '@app/http-lib/http-lib.module';
+import { AuthService } from './services/auth.service';
 
 @Module({
   imports: [
@@ -26,6 +28,7 @@ import { HttpLibModule } from '@app/http-lib/http-lib.module';
     ]),
     HttpLibModule,
   ],
-  controllers: [UserController, TaskController],
+  providers: [AuthService],
+  controllers: [UserController, AuthController, TaskController],
 })
 export class AppModule {}
