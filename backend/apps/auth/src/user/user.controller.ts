@@ -20,4 +20,9 @@ export class UserController {
   login(user: User) {
     return this.authService.login(user);
   }
+
+  @MessagePattern({ cmd: 'get_user' })
+  getUser(email: string) {
+    return this.userService.getUserByEmail(email);
+  }
 }
