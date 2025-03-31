@@ -7,7 +7,7 @@ export class UserApi extends AbstractUserApi {
     super(apiClient);
   }
 
-  getMe = () => {
+  getUser = () => {
     return this.getRequest<UserDto>("me/");
   };
 }

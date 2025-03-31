@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import type { TaskDto } from '@/models/entities/TaskDto';
 import { TaskStatus } from '@/models/entities/enums/TaskStatus';
+
 export interface TaskStore {
   _taskList: Array<TaskDto>;
 }
@@ -44,5 +45,8 @@ export const useTaskListStore = defineStore('taskList', {
         this._taskList[index] = task;
       }
     },
+    clearState(): void {
+      this._taskList = [];
+    }
   }
 });

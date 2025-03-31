@@ -24,6 +24,7 @@ const handleTaskListResponse = (res: HttpResponse<Array<TaskDto>>) => {
 }
 
 const fetchTasks = () => {
+  if (taskListStore.taskList.length > 0) return;
   withErrorHandling(taskApi.getAllTasks())
     .then(handleTaskListResponse)
     .catch((err: HttpError) => console.log("TasksView.vue fetchTasks Error", err))

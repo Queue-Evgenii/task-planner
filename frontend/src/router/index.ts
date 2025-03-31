@@ -1,7 +1,4 @@
-import type { HttpError } from '@/models/utils/browser/http/HttpError';
-import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
 import { Token } from '@/models/utils/browser/Token';
-import { useTaskListStore } from '@/stores/tasks';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -53,7 +50,14 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   if (to.name === 'greeting') return next();
-  if (from.name === undefined) return next({ name: 'greeting' });
+  if (from.name === undefined) {
+    console.log('Redirect to greeting');
+    return next({ name: 'greeting' });
+  }
+  if (to.name === 'auth' && Token.exists()) {
+    console.log('Redirect to profile');
+    return next({ name: 'profile' });
+  }
   next();
 });
 

@@ -1,25 +1,46 @@
 <script setup lang="ts">
+import { withErrorHandling } from '@/api/ApiErrorHandler';
+import type { UserApi } from '@/api/modules/user/User';
 import type { UserDto } from '@/models/entities/UserDto';
-import { computed } from 'vue';
+import type { HttpError } from '@/models/utils/browser/http/HttpError';
+import type { HttpResponse } from '@/models/utils/browser/http/HttpResponse';
+import { Token } from '@/models/utils/browser/Token';
+import { useTaskListStore } from '@/stores/tasks';
+import { useUserStore } from '@/stores/user';
+import { inject, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+const userApi = inject<UserApi>('UserApi')!;
+const userStore = useUserStore();
+const taskListStore = useTaskListStore();
+const router = useRouter();
 
-const userData: Partial<UserDto> = {
-  name: "Test Name",
-  surname: "Test Surname",
-  email: "email@email.email",
+const fetchUser = () => {
+  if (userStore.user !== undefined) return;
+  withErrorHandling(userApi.getUser())
+    .then((res: HttpResponse<UserDto>) => {
+      userStore.setUser(res.data);
+    })
+    .catch((err: HttpError) => console.log("ProfileView.vue fetchUser Error", err))
 }
-const fullname = computed(() => {
-  return (userData.name ? userData.name : '') + (userData.surname ? ' ' + userData.surname : '');
+const logout = () => {
+  Token.remove();
+  userStore.clearState();
+  taskListStore.clearState();
+  router.push({ name: 'auth' });
+};
+
+onMounted(() => {
+  fetchUser();
 })
-const handleClick = () => {};
 </script>
 
 <template>
-  <div class="profile">
+  <div v-if="userStore.user" class="profile">
     <div class="profile__container _container _flex _f-dir-col _gap-y-12">
-      <h2 class="profile__title">Hello, {{ fullname }} &#128075;</h2>
-      <h3 class="profile__email">Verified with <span>{{ userData.email }}</span></h3>
-      <button @click="handleClick" class="profile__button _button-danger">Log Out</button>
+      <h2 class="profile__title">Hello, {{ userStore.fullname }} &#128075;</h2>
+      <h3 class="profile__email">Verified with <span>{{ userStore.user.email }}</span></h3>
+      <button @click="logout" class="profile__button _button-danger">Log Out</button>
     </div>
   </div>
 </template>
