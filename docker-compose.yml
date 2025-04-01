@@ -1,0 +1,91 @@
+services:
+  gateway:
+    build: ./backend
+    container_name: gateway
+    command: node dist/apps/gateway/main
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth
+      - task
+      - db
+    environment:
+      - AUTH_HOST=auth
+      - AUTH_PORT=3001
+      - TASK_HOST=task
+      - TASK_PORT=3002
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=1111
+      - DATABASE_NAME=task-planner
+    networks:
+      - backend
+
+  auth:
+    build: ./backend
+    container_name: auth
+    command: node dist/apps/auth/main
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=1111
+      - DATABASE_NAME=task-planner
+      - MS_HOST=0.0.0.0
+      - MS_PORT=3001
+    networks:
+      - backend
+
+  task:
+    build: ./backend
+    container_name: task
+    command: node dist/apps/task/main
+    ports:
+      - "3002:3002"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=1111
+      - DATABASE_NAME=task-planner
+      - MS_HOST=0.0.0.0
+      - MS_PORT=3002
+    networks:
+      - backend
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: task-planner
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - gateway
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

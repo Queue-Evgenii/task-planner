@@ -1,8 +1,8 @@
 import { Token } from '@/models/utils/browser/Token';
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/:pathMatch(.*)*',
@@ -11,17 +11,17 @@ const router = createRouter({
     {
       path: '/',
       name: 'greeting',
-      component: import('@/views/GreetingView.vue'),
+      component: () => import('@/views/GreetingView.vue'),
     },
     {
       path: '/auth',
       name: 'auth',
-      component: import('@/views/AuthView.vue'),
+      component: () => import('@/views/AuthView.vue'),
     },
     {
       path: '/home',
       name: 'home',
-      component: import('@/views/HomeView.vue'),
+      component: () => import('@/views/HomeView.vue'),
       children: [
         {
           path: '',
@@ -31,12 +31,12 @@ const router = createRouter({
         {
           path: 'profile',
           name: 'profile',
-          component: import('@/views/home/ProfileView.vue'),
+          component: () => import('@/views/home/ProfileView.vue'),
         },
         {
           path: 'tasks',
           name: 'tasks',
-          component: import('@/views/home/TasksView.vue'),
+          component: () => import('@/views/home/TasksView.vue'),
         },
       ],
     },
@@ -49,6 +49,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  console.log("beforeEach run")
   if (to.name === 'greeting') return next();
   if (from.name === undefined) {
     console.log('Redirect to greeting');
