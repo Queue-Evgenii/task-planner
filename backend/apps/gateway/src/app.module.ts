@@ -13,7 +13,7 @@ import { AuthService } from './services/auth.service';
         name: 'USER_MICROSERVICE',
         transport: Transport.TCP,
         options: {
-          host: process.env.AUTH_HOST || 'auth',
+          host: process.env.AUTH_HOST || 'localhost',
           port: parseInt(process.env.AUTH_PORT as string, 10) || 3001,
         },
       },
@@ -21,7 +21,7 @@ import { AuthService } from './services/auth.service';
         name: 'TASK_MICROSERVICE',
         transport: Transport.TCP,
         options: {
-          host: process.env.TASK_HOST || 'task',
+          host: process.env.TASK_HOST || 'localhost',
           port: parseInt(process.env.TASK_PORT as string, 10) || 3002,
         },
       },

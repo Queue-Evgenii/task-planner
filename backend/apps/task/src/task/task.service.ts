@@ -18,9 +18,14 @@ export class TaskService {
     return this.taskRepository.save(task);
   }
 
-  // TODO: must return root parent
+  // FIXME: Implement deeper layering
   async createStep(email: string, task: Partial<Task>): Promise<Task> {
     const taskExists = await this.getExistingTask(email, task);
+    if (task.parentTask) {
+      throw new RpcException(
+        new HttpException('Too deep nesting layer!', HttpStatus.BAD_REQUEST),
+      );
+    }
 
     if (task.steps && task.steps.length > 0) {
       const childs = task.steps
@@ -29,7 +34,9 @@ export class TaskService {
       await this.taskRepository.save(childs);
       taskExists.steps = [...(taskExists.steps || []), ...childs];
     }
-    return this.taskRepository.save(taskExists);
+    const temp = await this.taskRepository.save(taskExists);
+    console.log(temp);
+    return temp;
   }
 
   async update(email: string, task: Partial<Task>): Promise<Task> {
