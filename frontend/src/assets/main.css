@@ -41,3 +41,8 @@ body {
   text-align: center;
   color: var(--color-heading);
 }
+._error {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-error);
+}

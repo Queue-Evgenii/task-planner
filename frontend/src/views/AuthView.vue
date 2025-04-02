@@ -12,6 +12,7 @@ import { withErrorHandling } from '@/api/ApiErrorHandler';
 const router = useRouter();
 const authApi = inject<AuthApi>('AuthApi')!;
 const hasAccount = ref(true);
+const error = ref('');
 const data = reactive<UserDto>({
   email: '',
   password: '',
@@ -28,12 +29,18 @@ const handleResponse = (res: HttpResponse<string>) => {
 const authorizate = (user: UserDto) => {
   withErrorHandling(authApi.authorization(user))
     .then(handleResponse)
-    .catch((err) => console.log('AuthView.vue authorizate Error', err));
+    .catch((err) => {
+      error.value = err.response.data.message;
+      console.log('AuthView.vue authorizate Error', err)
+    });
 };
 const registrate = (user: UserDto) => {
   withErrorHandling(authApi.registration(user))
     .then(handleResponse)
-    .catch((err) => console.log('AuthView.vue registrate Error', err));
+    .catch((err) => {
+      error.value = err.response.data.message;
+      console.log('AuthView.vue registrate Error', err);
+    });
 };
 
 const handleClick = () => {
@@ -85,6 +92,7 @@ const handleClick = () => {
           type="password"
           placeholder="Enter password"
           class="_input _input-errors"
+          @keyup.enter="handleClick"
         />
       </div>
       <div class="_flex _f-dir-col _gap-y-8">
@@ -95,6 +103,7 @@ const handleClick = () => {
           {{ hasAccount ? 'No account?' : 'Have account?' }}
           <span @click="hasAccount = !hasAccount">{{ !hasAccount ? 'Sign In' : 'Sign Up' }}</span>
         </p>
+        <div v-if="error" class="_error">{{ error }}</div>
       </div>
     </form>
   </div>
@@ -124,6 +133,9 @@ const handleClick = () => {
       cursor: pointer;
       text-decoration: underline;
     }
+  }
+  ._error {
+    text-align: center;
   }
 }
 </style>

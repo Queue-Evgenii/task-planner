@@ -22,6 +22,7 @@ export class UserService {
   }
 
   async create(user: User): Promise<string> {
+    this.throwIfUserInvalid(user);
     await this.throwIfUserExists(user.email);
     this.hashPassword(user);
 
@@ -34,6 +35,23 @@ export class UserService {
     if (userExists) {
       throw new RpcException(
         new HttpException('User already exists', HttpStatus.BAD_REQUEST),
+      );
+    }
+  }
+  private throwIfUserInvalid(user: User): void {
+    if (user.name.length === 0) {
+      throw new RpcException(
+        new HttpException('Invalid name', HttpStatus.BAD_REQUEST),
+      );
+    }
+    if (user.password.length === 0) {
+      throw new RpcException(
+        new HttpException('Invalid password', HttpStatus.BAD_REQUEST),
+      );
+    }
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(user.email)) {
+      throw new RpcException(
+        new HttpException('Invalid e-mail', HttpStatus.BAD_REQUEST),
       );
     }
   }

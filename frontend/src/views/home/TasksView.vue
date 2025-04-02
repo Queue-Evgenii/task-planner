@@ -125,8 +125,13 @@ onMounted(() => {
   background-color: var(--color-background-mute);
 }
 .tasks__input {
+  padding-bottom: 1rem;
+  padding-top: 2rem;
   position: fixed;
   width: 100%;
-  bottom: 70px;
+  bottom: 3.5rem;
+}
+.tasks__input ._input {
+  box-shadow: 0px -8px 48px var(--color-border);
 }
 </style>
