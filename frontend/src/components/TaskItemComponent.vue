@@ -8,16 +8,26 @@ import type { _DeepPartial } from 'pinia';
 
 const emits = defineEmits(['completeTaskHoisting', 'deleteTaskHoisting', 'addTaskHoisting']);
 const props = defineProps({
+  maxNestingLevel: {
+    type: Number,
+    default: 1,
+  },
+  nestingLevel: {
+    type: Number,
+    default: 0,
+  },
   task: {
     type: Object as PropType<TaskDto>,
     required: true,
   },
 });
 const countCompletedSteps = (task: TaskDto): number => {
-  let count = task.status === TaskStatus.COMPLETED ? 1 : 0;
+  let count = 0;
 
   if (task.steps) {
-    count += task.steps.reduce((sum, step) => sum + countCompletedSteps(step), 0);
+    task.steps.forEach(step => {
+      count += step.status === TaskStatus.COMPLETED ? 1 : 0;
+    })
   }
 
   return count;
@@ -46,9 +56,14 @@ const addNewTask = () => {
   isNewTaskCreating.value = false;
 };
 
+
+
 const delegateCompleteTaskHoisting = (id: number) => emits('completeTaskHoisting', id);
 
-const delegateAddTaskHoisting = (task: _DeepPartial<TaskDto>) => emits('addTaskHoisting', task);
+const delegateAddTaskHoisting = (task: _DeepPartial<TaskDto>) => {
+  if (props.nestingLevel > props.maxNestingLevel) return;
+  emits('addTaskHoisting', task);
+}
 
 const delegateDeleteTask = (id: number) => emits('deleteTaskHoisting', id);
 </script>
@@ -65,7 +80,7 @@ const delegateDeleteTask = (id: number) => emits('deleteTaskHoisting', id);
       </div>
       <div class="task__controls _flex _ai-c _gap-x-4">
         <button
-          v-if="task.status === TaskStatus.ACTIVE"
+          v-if="nestingLevel < maxNestingLevel && task.status === TaskStatus.ACTIVE"
           type="button"
           @click="isNewTaskCreating = !isNewTaskCreating"
         >
@@ -84,6 +99,7 @@ const delegateDeleteTask = (id: number) => emits('deleteTaskHoisting', id);
             @complete-task-hoisting="delegateCompleteTaskHoisting"
             @add-task-hoisting="delegateAddTaskHoisting"
             @delete-task-hoisting="delegateDeleteTask"
+            :nesting-level="nestingLevel + 1"
           />
         </li>
         <li v-if="isNewTaskCreating" class="steps__item">

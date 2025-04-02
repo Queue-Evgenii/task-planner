@@ -1,4 +1,3 @@
-tem
 <script setup lang="ts">
 import InputComponent, { type InputProps } from './InputComponent.vue';
 
@@ -14,7 +13,7 @@ const handleClick = () => {
 
 <template>
   <div class="input-with _flex _f-dir-col _gap-y-8">
-    <InputComponent v-model="value" :placeholder="placeholder" />
+    <InputComponent v-model="value" :placeholder="placeholder" @keyup.enter="handleClick" />
     <button type="button" @click="handleClick" class="input-with__button">
       <slot></slot>
     </button>

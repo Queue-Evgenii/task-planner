@@ -115,6 +115,9 @@ onMounted(() => {
 </template>
 
 <style>
+.tasks__container {
+  padding-bottom: 12rem;
+}
 .tasks__line {
   display: block;
   width: 100%;
